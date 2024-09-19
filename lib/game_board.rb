@@ -18,7 +18,20 @@ class GameBoard
    puts "|#{self.board[3]}|" + " |#{self.board[4]}|" + " |#{self.board[5]}|"
    puts "-----------"
    puts "|#{self.board[6]}|" + " |#{self.board[7]}|" + " |#{self.board[8]}|"
-   
+  end
+
+  def check_board(symbol, win_conditions)
+    checked_array = []
+    win_conditions.each_with_index do |row, row_index|
+      row.each_with_index do |spot, spot_index|
+        checked_array << @board[spot-1]
+      end
+      if checked_array.all?(symbol) == true
+        return true
+      end
+      checked_array = []
+    end
+    false
   end
 end
 

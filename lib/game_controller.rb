@@ -18,18 +18,17 @@ class GameController
   end
 
   def play()
-    9.times do
+    until @game_end == true
       @board.print_board
       current_player = alternate_turn(@turn_number)
       puts "#{current_player.symbol}, Choose a number between 1-9 to play a move!"
       move = gets.chomp.to_i
       @board.update_board(current_player.symbol, move)
-      check_status(@board)
+      check_status(current_player, @board)
     end
   end
 
   def alternate_turn(turn_num)
-    p "turn num #{turn_num}"
     if turn_num == 1
       @turn_number = 2
       return @player_one
@@ -39,11 +38,25 @@ class GameController
     end
   end
 
-  def check_status(board)
-    
+  def check_status(current_player, board)
+    if board.check_board(current_player.symbol, WINS) == true
+      @game_end = true
+      game_over(current_player.symbol)
+    end
   end
 
-  def game_over
+  def game_over(winner)
+    puts "#{winner} has won the game! Would you like to play again?"
+    puts "Press E to play again or any other key to quit."
+    response = gets.chomp
+    if response == "e" || response == "E"
+      @game_end = false
+      @board = GameBoard.new(@player_one, @player_two)
+      game_start
+    end
+  end
+
+  def draw
     
   end
 end
