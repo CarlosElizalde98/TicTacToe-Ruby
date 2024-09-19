@@ -17,6 +17,8 @@ class GameController
     play()
   end
 
+  protected
+
   def play()
     until @game_end == true
       @board.print_board
@@ -27,6 +29,7 @@ class GameController
       check_status(current_player, @board)
     end
   end
+   
 
   def alternate_turn(turn_num)
     if turn_num == 1
@@ -60,6 +63,3 @@ class GameController
     
   end
 end
-
-game_test = GameController.new()
-game_test.play
