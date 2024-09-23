@@ -24,8 +24,7 @@ class GameController
       @board.print_board
       current_player = alternate_turn(@turn_number)
       puts "#{current_player.symbol}, Choose a number between 1-9 to play a move!"
-      move = gets.chomp.to_i
-      @board.update_board(current_player.symbol, move)
+      sanitize_input(current_player.symbol)
       check_status(current_player, @board)
     end
   end
@@ -43,12 +42,14 @@ class GameController
 
   def check_status(current_player, board)
     if board.check_board(current_player.symbol, WINS) == true
-      @game_end = true
       game_over(current_player.symbol)
+    else
+      draw_check
     end
   end
 
   def game_over(winner)
+    @game_end = true
     puts "#{winner} has won the game! Would you like to play again?"
     puts "Press E to play again or any other key to quit."
     response = gets.chomp
@@ -59,7 +60,23 @@ class GameController
     end
   end
 
-  def draw
-    
+  def draw_check
+    if @board.board.all? { |spot| (spot.is_a? Integer) == false } && @game_end == false
+      game_over("Nobody")
+    end
+  end
+
+  def sanitize_input(symbol)
+    move = gets.chomp.to_i
+    while move.between?(1,9) == false
+      puts "Only enter a number between 1 and 9."
+      move = gets.chomp.to_i
+    end
+    while (@board.board[move - 1].is_a? Integer) == false
+      p @board.board[move - 1]
+      puts "Woah that's already occupied! Please try again"
+      move = gets.chomp.to_i
+    end
+    @board.update_board(symbol, move)
   end
 end
