@@ -73,7 +73,6 @@ class GameController
       move = gets.chomp.to_i
     end
     while (@board.board[move - 1].is_a? Integer) == false
-      p @board.board[move - 1]
       puts "Woah that's already occupied! Please try again"
       move = gets.chomp.to_i
     end
